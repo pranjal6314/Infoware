@@ -25,7 +25,6 @@ const util = require("util");
 const mysql = require("mysql2");
 
 const connection = require("./db");
-
 const query = util.promisify(connection.query).bind(connection);
 module.exports = connection.promise();
 
@@ -35,6 +34,7 @@ app.get("/", async (req, res) => {
   res.json(rows);
 });
 
+//        http://localhost:4000/employees/
 app.post("/employees", async (req, res) => {
   const { name, email, position, contacts } = req.body;
 
@@ -53,6 +53,28 @@ app.post("/employees", async (req, res) => {
       );
     }
     res.status(201).json({ message: "Employee created successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+//      http://localhost:4000/employees/{id}
+app.put("/employees/:id", async (req, res) => {
+  const id = req.params.id;
+  const { name, email, position } = req.body;
+
+  try {
+    const result = connection.query(
+      "UPDATE employees SET name = ?, email = ?, position = ? WHERE id = ?",
+      [name, email, position, id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
+    res.status(200).json({ message: "Employee updated successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
