@@ -1,8 +1,19 @@
 # Infoware
 
+## Running Tests
+
+To run tests, run the following command
+
+```bash
+  npm intall
+  
+```bash
+  nodemon app.js
+
 ## API Reference
 
 #### Get all Employees Data 
+
 
 ```http
   GET /api/
