@@ -34,7 +34,7 @@ app.get("/", async (req, res) => {
   res.json(rows);
 });
 
-//        http://localhost:4000/employees/
+//   post ->     http://localhost:4000/employees/
 app.post("/employees", async (req, res) => {
   const { name, email, position, contacts } = req.body;
 
@@ -59,7 +59,7 @@ app.post("/employees", async (req, res) => {
   }
 });
 
-//      http://localhost:4000/employees/{id}
+//  put ->    http://localhost:4000/employees/{id}
 app.put("/employees/:id", async (req, res) => {
   const id = req.params.id;
   const { name, email, position } = req.body;
@@ -81,7 +81,7 @@ app.put("/employees/:id", async (req, res) => {
   }
 });
 
-//          http://localhost:4000/employees/{id}
+//    delete ->      http://localhost:4000/employees/{id}
 app.delete("/employees/:id", async (req, res) => {
   const id = req.params.id;
 
@@ -103,6 +103,40 @@ app.delete("/employees/:id", async (req, res) => {
     );
 
     res.status(200).json({ message: "Employee deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+//   get ->   http://localhost:4000/employees/{id}
+app.get("/employees/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // Get employee details from employees table
+    const employeeResult = await query("SELECT * FROM employees WHERE id = ?", [
+      id,
+    ]);
+
+    if (!employeeResult) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
+    const contactResult = await query(
+      "SELECT * FROM contact_details WHERE employee_id = ?",
+      [id]
+    );
+    console.log(contactResult);
+    const employee = {
+      id: employeeResult[0].id,
+      name: employeeResult[0].name,
+      email: employeeResult[0].email,
+      position: employeeResult[0].position,
+      contacts: contactResult,
+    };
+
+    res.status(200).json(employee);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
