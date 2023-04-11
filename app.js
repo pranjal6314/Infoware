@@ -25,3 +25,36 @@ const util = require("util");
 const mysql = require("mysql2");
 
 const connection = require("./db");
+
+const query = util.promisify(connection.query).bind(connection);
+module.exports = connection.promise();
+
+//     http://localhost:4000/
+app.get("/", async (req, res) => {
+  const rows = await query("SELECT * FROM employees");
+  res.json(rows);
+});
+
+app.post("/employees", async (req, res) => {
+  const { name, email, position, contacts } = req.body;
+
+  try {
+    const result = connection.query(
+      "INSERT INTO employees (name, email, position) VALUES (?, ?, ?)",
+      [name, email, position]
+    );
+
+    const employeeId = result[0];
+    console.log(result);
+    for (const contact of contacts) {
+      connection.query(
+        "INSERT INTO contact_details (employee_id, contact_type, contact_info) VALUES (?, ?, ?)",
+        [10, contact.contact_type, contact.contact_info]
+      );
+    }
+    res.status(201).json({ message: "Employee created successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
