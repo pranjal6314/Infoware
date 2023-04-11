@@ -80,3 +80,35 @@ app.put("/employees/:id", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+//          http://localhost:4000/employees/{id}
+app.delete("/employees/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // Delete employee from employees table
+    const deleteEmployeeResult = await queryAsync(
+      "DELETE FROM employees WHERE id = ?",
+      [id]
+    );
+
+    if (deleteEmployeeResult.affectedRows === 0) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
+    // Delete employee's contact details from contact_details table
+    const deleteContactResult = await queryAsync(
+      "DELETE FROM contact_details WHERE employee_id = ?",
+      [id]
+    );
+
+    res.status(200).json({ message: "Employee deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
