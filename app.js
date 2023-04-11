@@ -29,13 +29,13 @@ const query = util.promisify(connection.query).bind(connection);
 module.exports = connection.promise();
 
 //     http://localhost:4000/
-app.get("/", async (req, res) => {
+app.get("/api/", async (req, res) => {
   const rows = await query("SELECT * FROM employees");
   res.json(rows);
 });
 
 //   post ->     http://localhost:4000/employees/
-app.post("/employees", async (req, res) => {
+app.post("/api/employee", async (req, res) => {
   const { name, email, position, contacts } = req.body;
 
   try {
@@ -60,7 +60,7 @@ app.post("/employees", async (req, res) => {
 });
 
 //  put ->    http://localhost:4000/employees/{id}
-app.put("/employees/:id", async (req, res) => {
+app.put("/api/employee/:id", async (req, res) => {
   const id = req.params.id;
   const { name, email, position } = req.body;
 
@@ -82,7 +82,7 @@ app.put("/employees/:id", async (req, res) => {
 });
 
 //    delete ->      http://localhost:4000/employees/{id}
-app.delete("/employees/:id", async (req, res) => {
+app.delete("/api/employee/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
@@ -110,7 +110,7 @@ app.delete("/employees/:id", async (req, res) => {
 });
 
 //   get ->   http://localhost:4000/employees/{id}
-app.get("/employees/:id", async (req, res) => {
+app.get("/api/employee/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
