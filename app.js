@@ -87,17 +87,18 @@ app.delete("/api/employee/:id", async (req, res) => {
 
   try {
     // Delete employee from employees table
-    const deleteEmployeeResult = await queryAsync(
+    const deleteEmployeeResult = connection.query(
       "DELETE FROM employees WHERE id = ?",
       [id]
     );
+    console.log(id);
 
     if (deleteEmployeeResult.affectedRows === 0) {
       return res.status(404).json({ message: "Employee not found" });
     }
 
     // Delete employee's contact details from contact_details table
-    const deleteContactResult = await queryAsync(
+    const deleteContactResult = connection.query(
       "DELETE FROM contact_details WHERE employee_id = ?",
       [id]
     );

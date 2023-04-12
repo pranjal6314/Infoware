@@ -8,16 +8,13 @@ To run tests, run the following command
   npm install
 ```
 
-  
 ```bash
   nodemon app.js
 ```
 
-
 ## API Reference
 
-#### Get all Employees Data 
-
+#### Get all Employees Data
 
 ```http
   GET /api/
@@ -27,22 +24,21 @@ To run tests, run the following command
 | :-------- | :------- | :------------------------- |
 | `api_key` | `string` | **Required**. Your API key |
 
-#### Create Employee 
+#### Create Employee
 
 ```http
   POST /api/employees
 ```
 
-#### Update Employee Details 
+#### Update Employee Details
 
 ```http
   PUT /api/employees/:id
 ```
 
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item employee update  
-
+| Parameter | Type     | Description                              |
+| :-------- | :------- | :--------------------------------------- |
+| `id`      | `string` | **Required**. Id of item employee update |
 
 #### Delete Employee Data
 
